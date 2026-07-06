@@ -163,6 +163,92 @@ function creteBigEnemy() {
 
 }
 
+function moveShip() {
+    if (keys["ArrowLeft"] && ship.x - ship.width / 2 > 0) {
+    ship.x = ship.x - ship.speed;
+  }
+
+  if (keys["ArrowRight"] && ship.x + ship.width / 2 < canvas.width) {
+    ship.x = ship.x + ship.speed;
+  }
+
+  if (keys["ArrowUp"] && ship.y - ship.height / 2 > 90) {
+    ship.y = ship.y - ship.speed;
+  }
+
+  if (keys["ArrowDown"] && ship.y + ship.height / 2 < canvas.height) {
+    ship.y = ship.y + ship.speed;
+  }
+}
+
+function moveShots() {
+    for (var i = shots.length - 1; i >= 0; i--) {
+        shots[i].y = shots[i].y - shots[i].speed;
+
+        if (shots[i].y < -30) {
+            shots.splice(i, 1);
+
+        }
+    }
+}
+
+
+function moveAliens() {
+     alienTimer++;
+
+    var limit = 65 - level * 2;
+
+    if (limit < 22) {
+        limit = 22;
+    }
+
+    if (alienTimer > limit) {
+        createAlien();
+        alienTimer = 0;
+
+
+    }
+
+
+    for (var i = alien.length - 1; i >=0; i--) {
+        aliens[i].y = aliens[i].y + aliens[i].speed;
+        lives--;
+
+
+        if (lives <= 0) {
+            endGame();
+        }
+    }
+}
+
+function moveBigEnemy() {
+    if (bigEnemy === null) {
+        return;
+
+    }
+
+    bigEnemy.x = bigEnemy.x + bigEnemy.speed * bigEnemy.directions;
+
+    if (bigEnemy.x < 20 || bigEnemy.x + bigEnemy.width > canvas.width - 20) {
+        bigEnemy.direction = bigEnemy.direction * -1;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+)
+}
+
 
 
 
