@@ -435,14 +435,99 @@ function drawBackground() {
 
     }
 
+function drawShots() {
+    for (var i = 0; i < shots.length; i++) {
+        ctx.fillStyle = "#ff3b78";
+        ctx.fillReact(shots[i].x, shots[i].y, shots[i].width, shots[i].height);
+
+        ctx.fillStyle = "#ffd6e3";
+        ctx.fillReact(shots[i].x + 2, shots[i].y - 4, 2, 4);
 
     }
+}
+
+function drawAlienFace(x, y, size) {
+  ctx.fillStyle = "#39d353";
+  ctx.beginPath();
+  ctx.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = "#1a1a1a";
+  ctx.beginPath();
+  ctx.arc(x + size * 0.35, y + size * 0.38, size * 0.09, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(x + size * 0.65, y + size * 0.38, size * 0.09, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "#1a1a1a";
+  ctx.lineWidth = 3;
+
+  ctx.beginPath();
+  ctx.moveTo(x + size * 0.25, y + size * 0.25);
+  ctx.lineTo(x + size * 0.45, y + size * 0.33);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x + size * 0.75, y + size * 0.25);
+  ctx.lineTo(x + size * 0.55, y + size * 0.33);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(x + size * 0.32, y + size * 0.68);
+  ctx.lineTo(x + size * 0.43, y + size * 0.58);
+  ctx.lineTo(x + size * 0.54, y + size * 0.70);
+  ctx.lineTo(x + size * 0.66, y + size * 0.58);
+  ctx.stroke();
+  
+
+}
+
+function drawAliens() {
+    for (var i = 0; i < aliens.length; i++) {
+        drawAliensFace(aliens[i].x, aliens[i].y, aliens[i].width);
+    }
+    
+}
+
+function drawBigEnemy() {
+    if (bigEnemy === null) {
+        return;
+    }
+
+    ctx.fillStyle = "#8a2be2";
+    ctx.beginPath();
+    ctx.arc(
+        bigEnemy.x + bigEnemy.width / 2,
+        bigEnemy.y + bigEnemy.height / 2,
+        bigEnemy.width / 2,
+        0,
+        Math.PI * 2
+
+    );
+
+
+    ctx.fill();
+
+    ctx.fillStyle = "black";
+    ctx.beginPath();
+    ctx.arc(bigEnemy.x + 120, bigEnemy.y +42, 12, 0, Math.PI * 2);\
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(bi)
+
+
+}
+}
+    
 
 
 
 }
 
-}
+
 
 
 
