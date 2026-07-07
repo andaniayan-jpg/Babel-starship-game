@@ -2,9 +2,37 @@ var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
 var scoreText = document.getElementById("scoreText");
-var livesText = document.getElementById("hpText");
+var livesText = document.getElementById("livesText");
 var levelText = document.getElementById("levelText");
 var message = document.getElementById("message");
+
+var startBtn = document.getElementById("startBtn");
+var pauseBtn = document.getElementById("pauseBtn");
+var resumeBtn = document.getElementById("resumeBtn");
+var restartBtn = document.getElementById("restartBtn");
+var helpBtn = document.getElementById("helpBtn");
+var themeBtn = document.getElementById("themeBtn");
+
+var easyBtn = document.getElementById("easyBtn");
+var normalBtn = document.getElementById("normalBtn");
+var hardBtn = document.getElementById("hardBtnx");
+
+var helpBox = document.getElementById("helpBox");
+
+var paused = false;
+var difficulty = "normal";
+var alienSpeedBonus = 1;
+var themeNumber = 0;
+
+var levelColors = [
+    "#05051a",
+    "#07182e",
+    "#1b1035",
+    "#122b1b",
+    "#2c160c",
+    "#301414"
+];
+
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -23,7 +51,7 @@ var score = 0;
 var lives = 5;
 var level = 1;
 
-var isPlaying = true;
+var isPlaying = false;
 var gameOver = false;
 
 var ship = {
@@ -68,6 +96,78 @@ document.addEventListener("keyup", function (event) {
   keys[event.code] = false;
 });
 
+startBtn.onclick = function () {
+    isPlaying = true;
+    paused = false;
+    message.innerText = "Game started. Shoot the aliens!";
+
+};
+
+pauseBtn.onclick = function () {
+    if (isPlaying && !gameover) {
+        paused = true;
+        message.innerText = "Game paused.";
+
+    }
+};
+
+resumeBtn.onclick = function () {
+    if (isPlaying && !gameOver) {
+        paused = false;
+        message.innerText = "Game resumed";
+
+    }
+};
+
+restartBtn.onclick = function () {
+    restartGame();
+};
+
+helpBtn.onClick = function () {
+    if (helpBox.classList.contains("hidden")) {
+        helpBox.classList.remove("hidden");
+    
+    } else {
+      helpBox.classList.add("hidden");
+    }
+}; 
+
+themeBtn.onClick = function () {
+    themeNumber++;
+
+    if (themeNumber >= levelColors.length) {
+        themeNumber = 0;
+
+    }
+
+
+    message.innerText = "Theme changed.";
+
+};
+
+easyBtn.onclick = function () {
+    difficulty = "easy";
+    alienSpeedBonus = 0.8;
+    message.innerText = "Difficulty set to easy.";
+
+};
+
+normalBtn.onclick = function () {
+    difficulty = "normal";
+    alienSpeedBonus = 1;
+    message.innerText = "Difficulty set to normal.";
+
+};
+
+hardBtn.onclick = function () {
+    difficulty = "hard";
+    alienSpeedBonus = 1.4;
+    message.innerText = "Difficulty set to Hard.";
+
+};
+
+
+
 
 
 
@@ -98,6 +198,8 @@ function updateText() {
   scoreText.innerText = score;
   livesText.innerText = lives;
   levelText.innerText = level;
+  killsText.innerText = killsInThisLevel;
+
 }
 
 
