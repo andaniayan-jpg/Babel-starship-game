@@ -4,6 +4,7 @@ var ctx = canvas.getContext("2d");
 var scoreText = document.getElementById("scoreText");
 var livesText = document.getElementById("livesText");
 var levelText = document.getElementById("levelText");
+var killsText = document.getElementById("killsText");
 var message = document.getElementById("message");
 
 var startBtn = document.getElementById("startBtn");
@@ -15,7 +16,7 @@ var themeBtn = document.getElementById("themeBtn");
 
 var easyBtn = document.getElementById("easyBtn");
 var normalBtn = document.getElementById("normalBtn");
-var hardBtn = document.getElementById("hardBtnx");
+var hardBtn = document.getElementById("hardBtn");
 
 var helpBox = document.getElementById("helpBox");
 
@@ -25,14 +26,13 @@ var alienSpeedBonus = 1;
 var themeNumber = 0;
 
 var levelColors = [
-    "#05051a",
-    "#07182e",
-    "#1b1035",
-    "#122b1b",
-    "#2c160c",
-    "#301414"
+  "#05051a",
+  "#07182e",
+  "#1b1035",
+  "#122b1b",
+  "#2c160c",
+  "#301414"
 ];
-
 
 function resizeCanvas() {
   canvas.width = window.innerWidth;
@@ -83,12 +83,32 @@ for (var i = 0; i < 90; i++) {
 document.addEventListener("keydown", function (event) {
   keys[event.code] = true;
 
+  if (
+    event.code === "Space" ||
+    event.code === "ArrowUp" ||
+    event.code === "ArrowDown" ||
+    event.code === "ArrowLeft" ||
+    event.code === "ArrowRight"
+  ) {
+    event.preventDefault();
+  }
+
   if (event.code === "Space") {
     makeShot();
   }
 
   if (event.code === "Enter" && gameOver) {
     restartGame();
+  }
+
+  if (event.code === "KeyP" && isPlaying && !gameOver) {
+    paused = !paused;
+
+    if (paused) {
+      message.innerText = "Game paused.";
+    } else {
+      message.innerText = "Game resumed.";
+    }
   }
 });
 
@@ -97,136 +117,77 @@ document.addEventListener("keyup", function (event) {
 });
 
 startBtn.onclick = function () {
-    isPlaying = true;
-    paused = false;
-    message.innerText = "Game started. Shoot the aliens!";
+  if (gameOver) {
+    restartGame();
+  }
 
+  isPlaying = true;
+  paused = false;
+  message.innerText = "Game started. Shoot the aliens!";
 };
 
 pauseBtn.onclick = function () {
-    if (isPlaying && !gameover) {
-        paused = true;
-        message.innerText = "Game paused.";
-
-    }
+  if (isPlaying && !gameOver) {
+    paused = true;
+    message.innerText = "Game paused.";
+  }
 };
 
 resumeBtn.onclick = function () {
-    if (isPlaying && !gameOver) {
-        paused = false;
-        message.innerText = "Game resumed";
-
-    }
+  if (isPlaying && !gameOver) {
+    paused = false;
+    message.innerText = "Game resumed.";
+  }
 };
 
 restartBtn.onclick = function () {
-    restartGame();
+  restartGame();
 };
 
-helpBtn.onClick = function () {
-    if (helpBox.classList.contains("hidden")) {
-        helpBox.classList.remove("hidden");
-    
-    } else {
-      helpBox.classList.add("hidden");
-    }
-}; 
+helpBtn.onclick = function () {
+  if (helpBox.classList.contains("hidden")) {
+    helpBox.classList.remove("hidden");
+    message.innerText = "Help opened.";
+  } else {
+    helpBox.classList.add("hidden");
+    message.innerText = "Help closed.";
+  }
+};
 
-themeBtn.onClick = function () {
-    themeNumber++;
+themeBtn.onclick = function () {
+  themeNumber++;
 
-    if (themeNumber >= levelColors.length) {
-        themeNumber = 0;
+  if (themeNumber >= levelColors.length) {
+    themeNumber = 0;
+  }
 
-    }
-
-
-    message.innerText = "Theme changed.";
-
+  message.innerText = "Theme changed.";
 };
 
 easyBtn.onclick = function () {
-    difficulty = "easy";
-    alienSpeedBonus = 0.8;
-    message.innerText = "Difficulty set to easy.";
-
+  difficulty = "easy";
+  alienSpeedBonus = 0.8;
+  message.innerText = "Difficulty set to Easy.";
 };
 
 normalBtn.onclick = function () {
-    difficulty = "normal";
-    alienSpeedBonus = 1;
-    message.innerText = "Difficulty set to normal.";
-
+  difficulty = "normal";
+  alienSpeedBonus = 1;
+  message.innerText = "Difficulty set to Normal.";
 };
 
 hardBtn.onclick = function () {
-    difficulty = "hard";
-    alienSpeedBonus = 1.4;
-    message.innerText = "Difficulty set to Hard.";
-
+  difficulty = "hard";
+  alienSpeedBonus = 1.4;
+  message.innerText = "Difficulty set to Hard.";
 };
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function updateText() {
   scoreText.innerText = score;
   livesText.innerText = lives;
   levelText.innerText = level;
   killsText.innerText = killsInThisLevel;
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function restartGame() {
   score = 0;
@@ -235,33 +196,20 @@ function restartGame() {
   shots = [];
   aliens = [];
   bigEnemy = null;
+  alienTimer = 0;
   killsInThisLevel = 0;
   neededKills = 8;
   isPlaying = true;
+  paused = false;
   gameOver = false;
   ship.x = canvas.width / 2;
   ship.y = canvas.height - 120;
-  message.innerText = "Use arrow keys to move. Press space to shoot.";
+  message.innerText = "Game restarted. Shoot the aliens!";
+  updateText();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function makeShot() {
-  if (!isPlaying || gameOver) {
+  if (!isPlaying || gameOver || paused) {
     return;
   }
 
@@ -272,22 +220,7 @@ function makeShot() {
     height: 18,
     speed: 9
   });
-}         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 function createAlien() {
   var size = 46;
@@ -344,17 +277,8 @@ function moveShots() {
   }
 }
 
-
-
-
-
-
-
-
-
-
 function moveAliens() {
-        alienTimer++;
+  alienTimer++;
 
   var limit = 65 - level * 2;
 
@@ -382,7 +306,7 @@ function moveAliens() {
 }
 
 function moveBigEnemy() {
-    if (bigEnemy === null) {
+  if (bigEnemy === null) {
     return;
   }
 
@@ -413,23 +337,6 @@ function checkShotAlienHits() {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function checkShotBigEnemyHits() {
   if (bigEnemy === null) {
@@ -487,7 +394,7 @@ function nextLevel() {
   if (level > 20) {
     isPlaying = false;
     gameOver = true;
-    message.innerText = "You won the game! Press ENTER to restart.";
+    message.innerText = "You won the game! Press ENTER or Restart to play again.";
     return;
   }
 
@@ -508,7 +415,7 @@ function nextLevel() {
 function endGame() {
   isPlaying = false;
   gameOver = true;
-  message.innerText = "Game over. Press ENTER to restart.";
+  message.innerText = "Game over. Press ENTER or Restart to play again.";
 }
 
 function isTouching(a, b) {
@@ -549,9 +456,6 @@ function drawShip() {
   var startX = ship.x - 5 * p;
   var startY = ship.y - 5 * p;
 
-
-
-
   block(startX + 5 * p, startY + 0 * p, p, "#3e03d2");
   block(startX + 5 * p, startY + 1 * p, p, "#3e03d2");
   block(startX + 5 * p, startY + 2 * p, p, "#3e03d2");
@@ -573,7 +477,6 @@ function drawShip() {
   block(startX + 5 * p, startY + 6 * p, p, "#f2f2f2");
   block(startX + 6 * p, startY + 6 * p, p, "#cccccc");
   block(startX + 7 * p, startY + 6 * p, p, "#f2f2f2");
-  block(startX + 8 * p, startY + 6 * p, p, "#0000");
 
   block(startX + 1 * p, startY + 7 * p, p, "#f7c948");
   block(startX + 3 * p, startY + 7 * p, p, "#f2f2f2");
@@ -705,5 +608,5 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-message.innerText = "Use arrow keys to move. Press space to shoot.";
+message.innerText = "Click Start to begin. Use arrow keys to move. Press Space to shoot.";
 gameLoop();
