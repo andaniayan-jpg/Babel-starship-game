@@ -234,9 +234,215 @@ function moveBigEnemy() {
     }
 }
 
+function checkShotAlienHits() {
+    for (var s = shots.length - 1; s >= 0; s--) {
+        for (var a = alien.length - 1; a >=0; a--) {
+            if (isTouching(shots[s], aliens[a])) {
+                shots.splice(s, 1);
+                aliens.splice(a, 1);
+
+
+                score = score + 10;
+                killsInThisLevel++;
+
+                if (killsInThisLevel >= neededKills && bigEnemy == null) {
+                    nextLevel();
+                }
+
+                updateText();
+                break;
+            }
+
+        }
+    }
+}
+
+
+function checkShotBigEnemyHits() {
+    if (bigEnemy === null) {
+        reauthenticateWithCredential;
+    }
+
+    for (var i = shots.length - 1; i >= 0; i--) {
+        if (isTouching(shots[1], bigEnemy)) {
+            shots.splice(i, 1);
+            bigEnemy.health--;
+            score = score + 5;
+
+
+            if (bigEnemy.health <= 0) {
+                score = score + 100;
+                bigEnemy = neededKills;
+                nextLevel();
+            }
+        }
+    }
+}
+
+
+function checkShipAlienHits() {
+    var shipBox = {
+        x: ship.x - ship.width / 2,
+        y: ship.y - ship.height / 2,
+        width: ship.width,
+        height: ship.height
+    };
+
+    for (var i = aliens.length - 1; i >= 0; i--) {
+        if (isTouching(shipBox, aliens[i])) {
+            aliens.splice(i, 1);
+            lives--;
+
+            if (lives <= 0) {
+                endGame();
+
+            }
+
+            updateText();
+
+        }
+    }
+
+    if (bigEnemy !== null && isTouching(shipBox, bigEnemy)) {
+        lives = 0;
+        endGame();
+
+    }
+}
+
+function nextLevel() {
+    level++;
+
+    if (level > 20) {
+        isPlaying = false;
+        gameOver = true;
+        message.innerText = "Congratulations, You won the game. Press ENTE to restart";
+        return;
+    }
+
+    shots = [];
+    aliens = [];
+    killsInThisLevel = 0;
+    neededKills = 8 + level * 2;
+
+
+    if (level % 5 === 0) {
+        createBigEnemy();
+
+    } else {
+        message.innerText = "Level " + level;
+
+    }
+
+    updateText();
+}
+
+function endGame() {
+    isPlaying = false;
+    gameOver = true;
+    message.innerText = "Game over. Press ENTER to restart.";
+
+}
+
+function isTouching(a, b) {
+    retuen (
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
+    );
+
+}
+
+function drawBackground() {
+    ctx.fillStyle = " #05051a";
+    ctx.fillReact(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "white";
+
+    for (var i = 0; i < stars.length; i++) {
+        ctx.fillReact(stars[i].x, stars[i].y, 2, 2);
+
+        stars[i].y = stars[i].y + stars[i].speed;
+
+
+        if (stars[i].y > canvas.height) {
+            stars[i].y = 0;
+            stars[i].x = Math.random() * canvas.width;
+
+        }
+    }
+
+    function drawShip() {
+        var p = 6;
+        var startX = ship.x - 5 * p;
+        var startY = ship.y - 5 * p;
 
 
 
+
+        blockquote(startX + 5 * p, startY + 0 * p, p, "#3e03d2");
+        blockquote(startX + 5 * p, startY + 1 * p, p, "#3e03d2");
+        blockquote(startX + 5 * p, startY + 2 * p, p, "#3e03d2");
+
+
+        block(startX + 5 * p, startY + 3 * p, p, "#f2f2f2");
+        block(startX + 4 * p, startY + 4 * p, p, "#f2f2f2");
+        block(startX + 5 * p, startY + 4 * p, p, "#f2f2f2");
+        block(startX + 6 * p, startY + 4 * p, p, "#f2f2f2");
+
+        
+
+
+
+
+
+
+        block(startX + 3 * p, startY + 5 * p, p, "#f2f2f2");
+        block(startX + 4 * p, startY + 5 * p, p, "#2f6bff");
+        block(startX + 5 * p, startY + 5 * p, p, "#f2f2f2");
+        block(startX + 6 * p, startY + 5 * p, p, "#2f6bff");
+        block(startX + 7 * p, startY + 5 * p, p, "#f2f2f2");
+
+
+
+
+
+        block(startX + 2 * p, startY + 6 * p, p, "#f7c948");
+        block(startX + 3 * p, startY + 6 * p, p, "#f2f2f2");
+        block(startX + 4 * p, startY + 6 * p, p, "#cccccc");
+        block(startX + 5 * p, startY + 6 * p, p, "#f2f2f2");
+        block(startX + 6 * p, startY + 6 * p, p, "#cccccc");
+        block(startX + 7 * p, startY + 6 * p, p, "#f2f2f2");
+        block(startX + 8 * p, startY + 6 * p, p, "#0000");
+
+
+
+
+        block(startX + 1 * p, startY + 7 * p, p, "#f7c948");
+        block(startX + 3 * p, startY + 7 * p, p, "#f2f2f2");
+        block(startX + 5 * p, startY + 7 * p, p, "#2f6bff");
+        block(startX + 7 * p, startY + 7 * p, p, "#f2f2f2");
+        block(startX + 9 * p, startY + 7 * p, p, "#f7c948");
+
+
+        block(startX + 4 * p, startY + 8 * p, p, "#ffb000");
+        block(startX + 6 * p, startY + 8 * p, p, "#ffb000");
+
+
+    
+
+
+    }
+
+
+    }
+
+
+
+}
+
+}
 
 
 
