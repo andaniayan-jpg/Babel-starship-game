@@ -681,7 +681,7 @@ function drawBigEnemy() {
 function gameLoop() {
   drawBackground();
 
-  if (isPlaying && !gameOver) {
+  if (isPlaying && !gameOver && !paused) {
     moveShip();
     moveShots();
 
