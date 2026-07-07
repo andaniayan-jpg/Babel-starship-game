@@ -165,6 +165,7 @@ hardBtn.onclick = function () {
     message.innerText = "Difficulty set to Hard.";
 
 };
+ 
 
 
 
@@ -520,7 +521,8 @@ function isTouching(a, b) {
 }
 
 function drawBackground() {
-  ctx.fillStyle = "#05051a";
+  var colorIndex = (level + themeNumber - 1) % levelColors.length;
+  ctx.fillStyle = levelColors[colorIndex];
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.fillStyle = "white";
