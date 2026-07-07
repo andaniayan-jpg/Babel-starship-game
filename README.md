@@ -14,7 +14,9 @@ src="https://github.com/user-attachments/assets/492cbf4a-071f-44a8-8e7d-040f3684
 
 # **To play this game:**
 
-1> Host the index.html by openinig it on your browser, or by using 'live server'.
+1> Host the index.html by openinig it on your browser, or by using 'live server'..
+
+
 2> To customise your experience, you can change the function logic, like this. 
 
 
