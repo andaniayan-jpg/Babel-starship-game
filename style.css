@@ -36,3 +36,41 @@ h1 {
     color: lightgray;
     font-size: 18px;
 }
+
+#buttonPanel,
+#difficultyPanel {
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+
+}
+
+button {
+    padding: 8px 14px;
+    border: 2px solid white;
+    background-color: #111144;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+button:hover {
+    background-color: #333399;
+
+}
+
+#helpBox {
+    width: 600px;
+    margin: 10px auto;
+    padding:12px;
+    border: 2px solid white;
+    background-color: #111133;
+    color: white;
+
+}
+
+.hidden {
+    display: none;
+}
