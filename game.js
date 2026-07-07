@@ -1,22 +1,20 @@
 var canvas = document.getElementById("gameCanvas");
 var ctx = canvas.getContext("2d");
 
-
 var scoreText = document.getElementById("scoreText");
 var livesText = document.getElementById("hpText");
 var levelText = document.getElementById("levelText");
-var message = document.getElementById("messages");
+var message = document.getElementById("message");
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
 
 resizeCanvas();
 
 window.addEventListener("resize", function () {
-    resizeCanvas();
+  resizeCanvas();
 });
 
 var keys = {};
@@ -28,13 +26,12 @@ var level = 1;
 var isPlaying = true;
 var gameOver = false;
 
-
 var ship = {
-    x: canvas.width / 2,
-    y: canvas.height - 120,
-    width: 48,
-    height: 48,
-    speed: 6
+  x: canvas.width / 2,
+  y: canvas.height - 120,
+  width: 48,
+  height: 48,
+  speed: 6
 };
 
 var shots = [];
@@ -68,27 +65,57 @@ document.addEventListener("keydown", function (event) {
 });
 
 document.addEventListener("keyup", function (event) {
-    keys[event.code] = true;
-
-    if (event.code === "space") {
-        makeShot();
-
-    }
-
-    if (event.code === "Enter" && gameOver) {
-        restartGame();
-
-    }
+  keys[event.code] = false;
 });
 
 
 
-function updateText() {
-    scoreText.innerText = score;
-    livesText.innerText = lives;
-    levelText.innerText= level;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function updateText() {
+  scoreText.innerText = score;
+  livesText.innerText = lives;
+  levelText.innerText = level;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -99,72 +126,95 @@ function updateText() {
 
 
 function restartGame() {
-    score = 0;
-    lives = 5;
-    level = 1;
-    shots = [];
-    aliens = [];
-    bigEnemy = null;
-    killsInThislevel = 0;
-    neededkills = 8;
-    isPlaying = true;
-    gameOver = false;
-    ship.x = canvas.width / 2;
-    ship.y = canvas.height - 120;
-    message.innerText = "Use arrow keys to move, press space to shoooot.";
+  score = 0;
+  lives = 5;
+  level = 1;
+  shots = [];
+  aliens = [];
+  bigEnemy = null;
+  killsInThisLevel = 0;
+  neededKills = 8;
+  isPlaying = true;
+  gameOver = false;
+  ship.x = canvas.width / 2;
+  ship.y = canvas.height - 120;
+  message.innerText = "Use arrow keys to move. Press space to shoot.";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function makeShot() {
-    if (!isPlaying || gameOver) {
-        return;
-    }
+  if (!isPlaying || gameOver) {
+    return;
+  }
 
-    shots.push({
-        x: ship.x - 3,
-        y: ship.y - 25,
-        width: 6,
-        height: 18,
-        speed: 9
+  shots.push({
+    x: ship.x - 3,
+    y: ship.y - 25,
+    width: 6,
+    height: 18,
+    speed: 9
+  });
+}         
 
-    });
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+function createAlien() {
+  var size = 46;
+  var speed = 1.5 + level * 0.25;
+
+  aliens.push({
+    x: Math.random() * (canvas.width - size),
+    y: -60,
+    width: size,
+    height: size,
+    speed: speed
+  });
 }
 
-function creatAlien() {
-    var size = 46;
-    var speed = 1.5 + level * 0.25;
+function createBigEnemy() {
+  bigEnemy = {
+    x: canvas.width / 2 - 90,
+    y: 90,
+    width: 180,
+    height: 110,
+    speed: 3,
+    direction: 1,
+    health: 15 + level * 3
+  };
 
-
-    aliens.push({
-        x: Math.random() * (canvas.width - size),
-        y: -60,
-        width: size,
-        height: size,
-        speed: speed
-
-    });
-}
-
-
-function creteBigEnemy() {
-    bigEnemy = {
-        x: canvas.width / 2 -90,
-        y: 90,
-        width: 180,
-        height: 110,
-        speed: 3,
-        direction: 1,
-        health: 15 + level * 3
-    };
-
-
-    message.innerText = "Big alien arrived!";
-
+  message.innerText = "Big alien arrived!";
 }
 
 function moveShip() {
-    if (keys["ArrowLeft"] && ship.x - ship.width / 2 > 0) {
+  if (keys["ArrowLeft"] && ship.x - ship.width / 2 > 0) {
     ship.x = ship.x - ship.speed;
   }
 
@@ -182,268 +232,263 @@ function moveShip() {
 }
 
 function moveShots() {
-    for (var i = shots.length - 1; i >= 0; i--) {
-        shots[i].y = shots[i].y - shots[i].speed;
+  for (var i = shots.length - 1; i >= 0; i--) {
+    shots[i].y = shots[i].y - shots[i].speed;
 
-        if (shots[i].y < -30) {
-            shots.splice(i, 1);
-
-        }
+    if (shots[i].y < -30) {
+      shots.splice(i, 1);
     }
+  }
 }
 
 
+
+
+
+
+
+
+
+
 function moveAliens() {
-     alienTimer++;
+        alienTimer++;
 
-    var limit = 65 - level * 2;
+  var limit = 65 - level * 2;
 
-    if (limit < 22) {
-        limit = 22;
+  if (limit < 22) {
+    limit = 22;
+  }
+
+  if (alienTimer > limit) {
+    createAlien();
+    alienTimer = 0;
+  }
+
+  for (var i = aliens.length - 1; i >= 0; i--) {
+    aliens[i].y = aliens[i].y + aliens[i].speed;
+
+    if (aliens[i].y > canvas.height + 50) {
+      aliens.splice(i, 1);
+      lives--;
+
+      if (lives <= 0) {
+        endGame();
+      }
     }
-
-    if (alienTimer > limit) {
-        createAlien();
-        alienTimer = 0;
-
-
-    }
-
-
-    for (var i = alien.length - 1; i >=0; i--) {
-        aliens[i].y = aliens[i].y + aliens[i].speed;
-        lives--;
-
-
-        if (lives <= 0) {
-            endGame();
-        }
-    }
+  }
 }
 
 function moveBigEnemy() {
     if (bigEnemy === null) {
-        return;
+    return;
+  }
 
-    }
+  bigEnemy.x = bigEnemy.x + bigEnemy.speed * bigEnemy.direction;
 
-    bigEnemy.x = bigEnemy.x + bigEnemy.speed * bigEnemy.directions;
-
-    if (bigEnemy.x < 20 || bigEnemy.x + bigEnemy.width > canvas.width - 20) {
-        bigEnemy.direction = bigEnemy.direction * -1;
-    }
+  if (bigEnemy.x < 20 || bigEnemy.x + bigEnemy.width > canvas.width - 20) {
+    bigEnemy.direction = bigEnemy.direction * -1;
+  }
 }
 
 function checkShotAlienHits() {
-    for (var s = shots.length - 1; s >= 0; s--) {
-        for (var a = alien.length - 1; a >=0; a--) {
-            if (isTouching(shots[s], aliens[a])) {
-                shots.splice(s, 1);
-                aliens.splice(a, 1);
+  for (var s = shots.length - 1; s >= 0; s--) {
+    for (var a = aliens.length - 1; a >= 0; a--) {
+      if (isTouching(shots[s], aliens[a])) {
+        shots.splice(s, 1);
+        aliens.splice(a, 1);
 
+        score = score + 10;
+        killsInThisLevel++;
 
-                score = score + 10;
-                killsInThisLevel++;
-
-                if (killsInThisLevel >= neededKills && bigEnemy == null) {
-                    nextLevel();
-                }
-
-                updateText();
-                break;
-            }
-
+        if (killsInThisLevel >= neededKills && bigEnemy === null) {
+          nextLevel();
         }
+
+        updateText();
+        break;
+      }
     }
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 function checkShotBigEnemyHits() {
-    if (bigEnemy === null) {
-        reauthenticateWithCredential;
+  if (bigEnemy === null) {
+    return;
+  }
+
+  for (var i = shots.length - 1; i >= 0; i--) {
+    if (isTouching(shots[i], bigEnemy)) {
+      shots.splice(i, 1);
+      bigEnemy.health--;
+      score = score + 5;
+
+      if (bigEnemy.health <= 0) {
+        score = score + 100;
+        bigEnemy = null;
+        nextLevel();
+      }
+
+      updateText();
+      break;
     }
-
-    for (var i = shots.length - 1; i >= 0; i--) {
-        if (isTouching(shots[1], bigEnemy)) {
-            shots.splice(i, 1);
-            bigEnemy.health--;
-            score = score + 5;
-
-
-            if (bigEnemy.health <= 0) {
-                score = score + 100;
-                bigEnemy = neededKills;
-                nextLevel();
-            }
-        }
-    }
+  }
 }
 
-
 function checkShipAlienHits() {
-    var shipBox = {
-        x: ship.x - ship.width / 2,
-        y: ship.y - ship.height / 2,
-        width: ship.width,
-        height: ship.height
-    };
+  var shipBox = {
+    x: ship.x - ship.width / 2,
+    y: ship.y - ship.height / 2,
+    width: ship.width,
+    height: ship.height
+  };
 
-    for (var i = aliens.length - 1; i >= 0; i--) {
-        if (isTouching(shipBox, aliens[i])) {
-            aliens.splice(i, 1);
-            lives--;
+  for (var i = aliens.length - 1; i >= 0; i--) {
+    if (isTouching(shipBox, aliens[i])) {
+      aliens.splice(i, 1);
+      lives--;
 
-            if (lives <= 0) {
-                endGame();
-
-            }
-
-            updateText();
-
-        }
-    }
-
-    if (bigEnemy !== null && isTouching(shipBox, bigEnemy)) {
-        lives = 0;
+      if (lives <= 0) {
         endGame();
+      }
 
+      updateText();
     }
+  }
+
+  if (bigEnemy !== null && isTouching(shipBox, bigEnemy)) {
+    lives = 0;
+    endGame();
+  }
 }
 
 function nextLevel() {
-    level++;
+  level++;
 
-    if (level > 20) {
-        isPlaying = false;
-        gameOver = true;
-        message.innerText = "Congratulations, You won the game. Press ENTE to restart";
-        return;
-    }
+  if (level > 20) {
+    isPlaying = false;
+    gameOver = true;
+    message.innerText = "You won the game! Press ENTER to restart.";
+    return;
+  }
 
-    shots = [];
-    aliens = [];
-    killsInThisLevel = 0;
-    neededKills = 8 + level * 2;
+  shots = [];
+  aliens = [];
+  killsInThisLevel = 0;
+  neededKills = 8 + level * 2;
 
+  if (level % 5 === 0) {
+    createBigEnemy();
+  } else {
+    message.innerText = "Level " + level;
+  }
 
-    if (level % 5 === 0) {
-        createBigEnemy();
-
-    } else {
-        message.innerText = "Level " + level;
-
-    }
-
-    updateText();
+  updateText();
 }
 
 function endGame() {
-    isPlaying = false;
-    gameOver = true;
-    message.innerText = "Game over. Press ENTER to restart.";
-
+  isPlaying = false;
+  gameOver = true;
+  message.innerText = "Game over. Press ENTER to restart.";
 }
 
 function isTouching(a, b) {
-    retuen (
-        a.x < b.x + b.width &&
-        a.x + a.width > b.x &&
-        a.y < b.y + b.height &&
-        a.y + a.height > b.y
-    );
-
+  return (
+    a.x < b.x + b.width &&
+    a.x + a.width > b.x &&
+    a.y < b.y + b.height &&
+    a.y + a.height > b.y
+  );
 }
 
 function drawBackground() {
-    ctx.fillStyle = " #05051a";
-    ctx.fillReact(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#05051a";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "white";
+  ctx.fillStyle = "white";
 
-    for (var i = 0; i < stars.length; i++) {
-        ctx.fillReact(stars[i].x, stars[i].y, 2, 2);
+  for (var i = 0; i < stars.length; i++) {
+    ctx.fillRect(stars[i].x, stars[i].y, 2, 2);
 
-        stars[i].y = stars[i].y + stars[i].speed;
+    stars[i].y = stars[i].y + stars[i].speed;
 
-
-        if (stars[i].y > canvas.height) {
-            stars[i].y = 0;
-            stars[i].x = Math.random() * canvas.width;
-
-        }
+    if (stars[i].y > canvas.height) {
+      stars[i].y = 0;
+      stars[i].x = Math.random() * canvas.width;
     }
+  }
+}
 
-    function drawShip() {
-        var p = 6;
-        var startX = ship.x - 5 * p;
-        var startY = ship.y - 5 * p;
+function block(x, y, size, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, size, size);
+}
 
-
-
-
-        blockquote(startX + 5 * p, startY + 0 * p, p, "#3e03d2");
-        blockquote(startX + 5 * p, startY + 1 * p, p, "#3e03d2");
-        blockquote(startX + 5 * p, startY + 2 * p, p, "#3e03d2");
-
-
-        block(startX + 5 * p, startY + 3 * p, p, "#f2f2f2");
-        block(startX + 4 * p, startY + 4 * p, p, "#f2f2f2");
-        block(startX + 5 * p, startY + 4 * p, p, "#f2f2f2");
-        block(startX + 6 * p, startY + 4 * p, p, "#f2f2f2");
-
-        
+function drawShip() {
+  var p = 6;
+  var startX = ship.x - 5 * p;
+  var startY = ship.y - 5 * p;
 
 
 
 
+  block(startX + 5 * p, startY + 0 * p, p, "#3e03d2");
+  block(startX + 5 * p, startY + 1 * p, p, "#3e03d2");
+  block(startX + 5 * p, startY + 2 * p, p, "#3e03d2");
 
+  block(startX + 5 * p, startY + 3 * p, p, "#f2f2f2");
+  block(startX + 4 * p, startY + 4 * p, p, "#f2f2f2");
+  block(startX + 5 * p, startY + 4 * p, p, "#f2f2f2");
+  block(startX + 6 * p, startY + 4 * p, p, "#f2f2f2");
 
-        block(startX + 3 * p, startY + 5 * p, p, "#f2f2f2");
-        block(startX + 4 * p, startY + 5 * p, p, "#2f6bff");
-        block(startX + 5 * p, startY + 5 * p, p, "#f2f2f2");
-        block(startX + 6 * p, startY + 5 * p, p, "#2f6bff");
-        block(startX + 7 * p, startY + 5 * p, p, "#f2f2f2");
+  block(startX + 3 * p, startY + 5 * p, p, "#f2f2f2");
+  block(startX + 4 * p, startY + 5 * p, p, "#2f6bff");
+  block(startX + 5 * p, startY + 5 * p, p, "#f2f2f2");
+  block(startX + 6 * p, startY + 5 * p, p, "#2f6bff");
+  block(startX + 7 * p, startY + 5 * p, p, "#f2f2f2");
 
+  block(startX + 2 * p, startY + 6 * p, p, "#f7c948");
+  block(startX + 3 * p, startY + 6 * p, p, "#f2f2f2");
+  block(startX + 4 * p, startY + 6 * p, p, "#cccccc");
+  block(startX + 5 * p, startY + 6 * p, p, "#f2f2f2");
+  block(startX + 6 * p, startY + 6 * p, p, "#cccccc");
+  block(startX + 7 * p, startY + 6 * p, p, "#f2f2f2");
+  block(startX + 8 * p, startY + 6 * p, p, "#0000");
 
+  block(startX + 1 * p, startY + 7 * p, p, "#f7c948");
+  block(startX + 3 * p, startY + 7 * p, p, "#f2f2f2");
+  block(startX + 5 * p, startY + 7 * p, p, "#2f6bff");
+  block(startX + 7 * p, startY + 7 * p, p, "#f2f2f2");
+  block(startX + 9 * p, startY + 7 * p, p, "#f7c948");
 
-
-
-        block(startX + 2 * p, startY + 6 * p, p, "#f7c948");
-        block(startX + 3 * p, startY + 6 * p, p, "#f2f2f2");
-        block(startX + 4 * p, startY + 6 * p, p, "#cccccc");
-        block(startX + 5 * p, startY + 6 * p, p, "#f2f2f2");
-        block(startX + 6 * p, startY + 6 * p, p, "#cccccc");
-        block(startX + 7 * p, startY + 6 * p, p, "#f2f2f2");
-        block(startX + 8 * p, startY + 6 * p, p, "#0000");
-
-
-
-
-        block(startX + 1 * p, startY + 7 * p, p, "#f7c948");
-        block(startX + 3 * p, startY + 7 * p, p, "#f2f2f2");
-        block(startX + 5 * p, startY + 7 * p, p, "#2f6bff");
-        block(startX + 7 * p, startY + 7 * p, p, "#f2f2f2");
-        block(startX + 9 * p, startY + 7 * p, p, "#f7c948");
-
-
-        block(startX + 4 * p, startY + 8 * p, p, "#ffb000");
-        block(startX + 6 * p, startY + 8 * p, p, "#ffb000");
-
-
-    
-
-
-    }
+  block(startX + 4 * p, startY + 8 * p, p, "#ffb000");
+  block(startX + 6 * p, startY + 8 * p, p, "#ffb000");
+}
 
 function drawShots() {
-    for (var i = 0; i < shots.length; i++) {
-        ctx.fillStyle = "#ff3b78";
-        ctx.fillReact(shots[i].x, shots[i].y, shots[i].width, shots[i].height);
+  for (var i = 0; i < shots.length; i++) {
+    ctx.fillStyle = "#ff3b78";
+    ctx.fillRect(shots[i].x, shots[i].y, shots[i].width, shots[i].height);
 
-        ctx.fillStyle = "#ffd6e3";
-        ctx.fillReact(shots[i].x + 2, shots[i].y - 4, 2, 4);
-
-    }
+    ctx.fillStyle = "#ffd6e3";
+    ctx.fillRect(shots[i].x + 2, shots[i].y - 4, 2, 4);
+  }
 }
 
 function drawAlienFace(x, y, size) {
@@ -480,69 +525,81 @@ function drawAlienFace(x, y, size) {
   ctx.lineTo(x + size * 0.54, y + size * 0.70);
   ctx.lineTo(x + size * 0.66, y + size * 0.58);
   ctx.stroke();
-  
-
 }
 
 function drawAliens() {
-    for (var i = 0; i < aliens.length; i++) {
-        drawAliensFace(aliens[i].x, aliens[i].y, aliens[i].width);
-    }
-    
+  for (var i = 0; i < aliens.length; i++) {
+    drawAlienFace(aliens[i].x, aliens[i].y, aliens[i].width);
+  }
 }
 
 function drawBigEnemy() {
+  if (bigEnemy === null) {
+    return;
+  }
+
+  ctx.fillStyle = "#8a2be2";
+  ctx.beginPath();
+  ctx.arc(
+    bigEnemy.x + bigEnemy.width / 2,
+    bigEnemy.y + bigEnemy.height / 2,
+    bigEnemy.width / 2,
+    0,
+    Math.PI * 2
+  );
+  ctx.fill();
+
+  ctx.fillStyle = "black";
+  ctx.beginPath();
+  ctx.arc(bigEnemy.x + 60, bigEnemy.y + 42, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.arc(bigEnemy.x + 120, bigEnemy.y + 42, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 6;
+
+  ctx.beginPath();
+  ctx.moveTo(bigEnemy.x + 45, bigEnemy.y + 78);
+  ctx.lineTo(bigEnemy.x + 70, bigEnemy.y + 65);
+  ctx.lineTo(bigEnemy.x + 95, bigEnemy.y + 82);
+  ctx.lineTo(bigEnemy.x + 120, bigEnemy.y + 65);
+  ctx.lineTo(bigEnemy.x + 145, bigEnemy.y + 78);
+  ctx.stroke();
+
+  ctx.fillStyle = "white";
+  ctx.font = "18px Arial";
+  ctx.fillText("HP: " + bigEnemy.health, bigEnemy.x + 65, bigEnemy.y - 12);
+}
+
+function gameLoop() {
+  drawBackground();
+
+  if (isPlaying && !gameOver) {
+    moveShip();
+    moveShots();
+
     if (bigEnemy === null) {
-        return;
+      moveAliens();
     }
 
-    ctx.fillStyle = "#8a2be2";
-    ctx.beginPath();
-    ctx.arc(
-        bigEnemy.x + bigEnemy.width / 2,
-        bigEnemy.y + bigEnemy.height / 2,
-        bigEnemy.width / 2,
-        0,
-        Math.PI * 2
+    moveBigEnemy();
 
-    );
+    checkShotAlienHits();
+    checkShotBigEnemyHits();
+    checkShipAlienHits();
+  }
 
+  drawShip();
+  drawShots();
+  drawAliens();
+  drawBigEnemy();
+  updateText();
 
-    ctx.fill();
-
-    ctx.fillStyle = "black";
-    ctx.beginPath();
-    ctx.arc(bigEnemy.x + 120, bigEnemy.y +42, 12, 0, Math.PI * 2);\
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.arc(bi)
-
-
-}
-}
-    
-
-
-
+  requestAnimationFrame(gameLoop);
 }
 
-
-
-
-
-
-
-
-
-
-
-)
-}
-
-
-
-
-
-}
-
+message.innerText = "Use arrow keys to move. Press space to shoot.";
+gameLoop();
