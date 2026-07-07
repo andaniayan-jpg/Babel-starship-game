@@ -28,4 +28,5 @@ The function will change the colour of the enemies from green(default) to your c
 
 3> Press ENTER to start the game. Use arrow keys to move. Press SPACE to shoot. 
 
-<img width="1847" height="985" alt="image" src="https://github.com/user-attachments/assets/edd62f86-e6d8-4f8f-91af-3133500c2d3a" />
+<img width="1906" height="1022" alt="image" src="https://github.com/user-attachments/assets/bc38e341-85fd-4263-a5b3-070e78219ac2" />
+
