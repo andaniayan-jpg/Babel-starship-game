@@ -1,5 +1,5 @@
 # Babel the Starship Game
-Babel is a game just like the arcade games of 90s, it has a starhip whose aim is to combat with the alient shipsin front of it. It has impressive graphics and sound effects. 
+Babel is a game just like the arcade games of 90s, it has a starship whose aim is to combat with the alient shipsin front of it. It has impressive graphics and sound effects. 
 
 **The development with 'index.html' was easier as i was familier with it. Since, i was not familier with JawaScript and css, I used AI for Functions, domain names and details, But the logic, math and colors are my own works.**
 
