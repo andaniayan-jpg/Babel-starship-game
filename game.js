@@ -291,7 +291,7 @@ function makeShot() {
 
 function createAlien() {
   var size = 46;
-  var speed = 1.5 + level * 0.25;
+  var speed = (1.5 + level * 0.25) * alienSpeedBonus;
 
   aliens.push({
     x: Math.random() * (canvas.width - size),
